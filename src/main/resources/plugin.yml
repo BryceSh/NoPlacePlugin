@@ -1,0 +1,11 @@
+name: NoPlace
+version: '${project.version}'
+main: com.ubiniti.noplace.Noplace
+api-version: 1.18
+authors: [ Ubiniti ]
+description: Prevent players form placing certain blocks
+website: ubiniti.com
+commands:
+  noplace:
+    description: Disable certain blocks from being able to be placed
+    usage: <add/remove/view>
