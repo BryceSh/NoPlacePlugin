@@ -11,6 +11,7 @@ import java.util.List;
 public final class Noplace extends JavaPlugin {
 
     public static final String pre = ChatColor.RED + "[" + ChatColor.BLUE + "NoPlace" + ChatColor.RED + "] " + ChatColor.WHITE;
+    public static final String insufficientPerm = pre + ChatColor.RED + "You do not have permission to run that command!";
 
     @Override
     public void onEnable() {

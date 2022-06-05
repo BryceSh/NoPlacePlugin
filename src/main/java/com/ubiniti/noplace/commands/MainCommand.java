@@ -24,40 +24,55 @@ public class MainCommand implements CommandExecutor {
         if (args.length == 0) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                player.sendMessage(Noplace.pre);
-                player.sendMessage("Usage: ");
-                player.sendMessage("/noplace add : to add the item in your current hand");
-                player.sendMessage("/noplace remove : remove the item in your current hand");
-                player.sendMessage("/noplace list : view the list of banned blocks");
+                if (player.isOp() || player.hasPermission("noplace.*")) {
+                    player.sendMessage(Noplace.pre);
+                    player.sendMessage("Usage: ");
+                    player.sendMessage("/noplace add : to add the item in your current hand");
+                    player.sendMessage("/noplace remove : remove the item in your current hand");
+                    player.sendMessage("/noplace list : view the list of banned blocks");
+                }
             }
         } else {
             if (args[0].equals("reload")) {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
-                    player.sendMessage(Noplace.pre + "Reloaded plugin!");
+                    if (player.isOp() || player.hasPermission("noplace.*") || player.hasPermission("noplace.place")) {
+                        CConfig.reloadConfig();
+                        player.sendMessage(Noplace.pre + "Reloaded plugin!");
+                        System.out.println("[NoPlace]:");
+                        System.out.println("Config file has been reloaded");
+                    } else {
+                        player.sendMessage(Noplace.insufficientPerm);
+                    }
                 }
-                System.out.println("[NoPlace]  Plugin has been reloaded!");
             } else if (args[0].equals("add")) {
 
                 if (sender instanceof Player) {
 
                     Player player = (Player) sender;
+                    if (player.isOp() || player.hasPermission("noplace.*") || player.hasPermission("noplace.add")) {
+                        String itemInHand = player.getInventory().getItemInMainHand().getType().name();
 
-                    String itemInHand = player.getInventory().getItemInMainHand().getType().name();
+                        if (!itemInHand.equals("AIR")) {
 
-                    if (!itemInHand.equals("AIR")) {
+                            List<String> disabledBlocks = CConfig.getConfig().getStringList("DisabledBlocks");
+                            if (!disabledBlocks.contains(itemInHand)) {
+                                disabledBlocks.add(itemInHand);
+                                player.sendMessage(Noplace.pre + "Added \"" + itemInHand + "\" to the list!");
+                                CConfig.getConfig().set("DisabledBlocks", disabledBlocks);
+                                CConfig.saveConfig();
+                            } else {
+                                player.sendMessage(Noplace.pre + "Block already blacklisted!");
+                            }
 
-                        List<String> disabledBlocks = CConfig.getConfig().getStringList("DisabledBlocks");
-                        disabledBlocks.add(itemInHand);
 
-                        player.sendMessage(Noplace.pre + "Added \"" + itemInHand + "\" to the list!");
-                        CConfig.getConfig().set("DisabledBlocks", disabledBlocks);
-                        CConfig.saveConfig();
+                        } else {
 
+                            player.sendMessage(Noplace.pre + "Please have a valid block in your hand!");
+
+                        }
                     } else {
-
-                        player.sendMessage(Noplace.pre + "Please have a valid block in your hand!");
-
+                        player.sendMessage(Noplace.insufficientPerm);
                     }
 
                 }
@@ -65,34 +80,42 @@ public class MainCommand implements CommandExecutor {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
 
-                    String itemInHand = player.getInventory().getItemInMainHand().getType().name();
+                    if (player.isOp() || player.hasPermission("noplace.*") || player.hasPermission("noplace.remove")) {
+                        String itemInHand = player.getInventory().getItemInMainHand().getType().name();
 
-                    if (!itemInHand.equals("AIR")) {
+                        if (!itemInHand.equals("AIR")) {
 
-                        List<String> disabledBlocks = CConfig.getConfig().getStringList("DisabledBlocks");
-                        disabledBlocks.remove(itemInHand);
+                            List<String> disabledBlocks = CConfig.getConfig().getStringList("DisabledBlocks");
+                            disabledBlocks.remove(itemInHand);
 
-                        player.sendMessage(Noplace.pre + "Removed \"" + itemInHand + "\" from the list!");
-                        CConfig.getConfig().set("DisabledBlocks", disabledBlocks);
-                        CConfig.saveConfig();
+                            player.sendMessage(Noplace.pre + "Removed \"" + itemInHand + "\" from the list!");
+                            CConfig.getConfig().set("DisabledBlocks", disabledBlocks);
+                            CConfig.saveConfig();
 
+                        } else {
+
+                            player.sendMessage(Noplace.pre + "Please have a valid block in your hand!");
+
+                        }
                     } else {
-
-                        player.sendMessage(Noplace.pre + "Please have a valid block in your hand!");
-
+                        player.sendMessage(Noplace.insufficientPerm);
                     }
+
 
                 }
             } else if (args[0].equals("list")) {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
 
-                    List<String> disabledBlocks = CConfig.getConfig().getStringList("DisabledBlocks");
-                    player.sendMessage(Noplace.pre + "List of disabled blocks");
-                    for (String block : disabledBlocks) {
-                        player.sendMessage(" - " + block);
+                    if (player.isOp() || player.hasPermission("noplace.*") || player.hasPermission("noplace.list")) {
+                        List<String> disabledBlocks = CConfig.getConfig().getStringList("DisabledBlocks");
+                        player.sendMessage(Noplace.pre + "List of disabled blocks");
+                        for (String block : disabledBlocks) {
+                            player.sendMessage(" - " + block);
+                        }
+                    } else {
+                        player.sendMessage(Noplace.insufficientPerm);
                     }
-
 
                 }
             } else {
@@ -104,4 +127,5 @@ public class MainCommand implements CommandExecutor {
         }
         return true;
     }
+
 }

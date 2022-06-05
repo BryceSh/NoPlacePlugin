@@ -22,9 +22,13 @@ public class BlockPlaced implements Listener {
         List<String> disabledBlocks = CConfig.getConfig().getStringList("DisabledBlocks");
 
         if (disabledBlocks.contains(placedBlock.getType().name())) {
-            if (!player.isOp() || !player.hasPermission("noplace.place")) {
-                e.setCancelled(true);
-                player.sendMessage(Noplace.pre + ChatColor.RED + "This block has been disabled!");
+            if (!player.isOp()) {
+                if (!player.hasPermission("noplace.*")) {
+                    if (!player.hasPermission("noplace.place")) {
+                        e.setCancelled(true);
+                        player.sendMessage(Noplace.pre + ChatColor.RED + "This block has been disabled!");
+                    }
+                }
             }
         }
 

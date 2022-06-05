@@ -8,4 +8,4 @@ website: ubiniti.com
 commands:
   noplace:
     description: Disable certain blocks from being able to be placed
-    usage: <add/remove/view>
+    usage: /<command> [add|remove|list]
