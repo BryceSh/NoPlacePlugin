@@ -2,6 +2,7 @@ package com.ubiniti.noplace;
 
 import com.ubiniti.noplace.commands.MainCommand;
 import com.ubiniti.noplace.files.CConfig;
+import com.ubiniti.noplace.listeners.listGUIListener;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,6 +31,7 @@ public final class Noplace extends JavaPlugin {
         CConfig.saveConfig();
 
         getCommand("noplace").setExecutor(new MainCommand());
+        getServer().getPluginManager().registerEvents(new listGUIListener(), this);
 
         getServer().getPluginManager().registerEvents(new BlockPlaced(), this);
 

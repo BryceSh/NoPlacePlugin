@@ -2,20 +2,13 @@ package com.ubiniti.noplace.commands;
 
 import com.ubiniti.noplace.Noplace;
 import com.ubiniti.noplace.files.CConfig;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import com.ubiniti.noplace.utilities.listGUI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.graalvm.compiler.asm.sparc.SPARCAssembler;
 
 import java.util.List;
-import java.util.Objects;
 
 public class MainCommand implements CommandExecutor {
     @Override
@@ -53,7 +46,7 @@ public class MainCommand implements CommandExecutor {
                     if (player.isOp() || player.hasPermission("noplace.*") || player.hasPermission("noplace.add")) {
                         String itemInHand = player.getInventory().getItemInMainHand().getType().name();
 
-                        if (!itemInHand.equals("AIR")) {
+                        if (!itemInHand.equals("AIR") && player.getInventory().getItemInMainHand().getType().isBlock()) {
 
                             List<String> disabledBlocks = CConfig.getConfig().getStringList("DisabledBlocks");
                             if (!disabledBlocks.contains(itemInHand)) {
@@ -108,11 +101,9 @@ public class MainCommand implements CommandExecutor {
                     Player player = (Player) sender;
 
                     if (player.isOp() || player.hasPermission("noplace.*") || player.hasPermission("noplace.list")) {
-                        List<String> disabledBlocks = CConfig.getConfig().getStringList("DisabledBlocks");
-                        player.sendMessage(Noplace.pre + "List of disabled blocks");
-                        for (String block : disabledBlocks) {
-                            player.sendMessage(" - " + block);
-                        }
+
+                        listGUI.openList(player);
+
                     } else {
                         player.sendMessage(Noplace.insufficientPerm);
                     }

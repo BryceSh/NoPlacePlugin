@@ -14,7 +14,7 @@ public class CConfig {
 
     public static void setup() {
 
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("NoPlace").getDataFolder(), "data.yml");
+        file = new File(Bukkit.getServer().getPluginManager().getPlugin("NoPlace").getDataFolder(), "blacklist.yml");
 
         if (!file.exists()) {
             try {

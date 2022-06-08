@@ -2,7 +2,6 @@ package com.ubiniti.noplace;
 
 import com.ubiniti.noplace.files.CConfig;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
